@@ -40,10 +40,6 @@ class View
             return '{{' . $item . '}}';
         }, $keys);
 
-
-
-        //$value = array_values($vars);
-
         // echo "<pre>";
         // print_r($keys);
         // echo "</pre>";

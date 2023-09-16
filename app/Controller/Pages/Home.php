@@ -4,9 +4,10 @@
 namespace App\Controller\Pages;
 
 use App\Utils\View;
+use App\Model\Entity\Organization;
 
 
-class Home
+class Home extends Page
 {
 
     /**
@@ -17,11 +18,20 @@ class Home
 
     public static function getHome()
     {
-        return View::render('pages/home', [
-            'name'      => 'Raimundo Marques',
-            'email'     => 'raimundo.marques.ff@gmail.com',
-            'cpf'       => '321654987-98', 
-            'matricula' => 202320142021
+        // Estanciando a classe da Organização
+        $obOrganization = new Organization();
+
+        // Título da página
+        $title = 'Página PHP - MVC';
+
+        // View da HOME
+        $content = View::render('pages/home', [
+            'id'            => $obOrganization->id,
+            'name'          => $obOrganization->name,
+            'site'          => $obOrganization->site,
+            'description'   => $obOrganization->description
         ]);
+
+        return parent::getPage($title, $content);
     }
 }
