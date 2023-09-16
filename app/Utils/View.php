@@ -20,22 +20,36 @@ class View
 
         return file_exists($file) ? file_get_contents($file) : '';
     }
-
-
     /**
      * Método responsável por retornar o conteúdo renderizado de uma view
      * 
      * @param string $view
+     * @param array $vars (string/numeric)
      * @return string
      */
 
-    public static function render($view)
+    public static function render($view, $vars = [])
     {
-
         // Conteúdo da VIEW
         $contentView = self::getContentView($view);
 
+        // Chaves dos arrays
+        $keys = array_keys($vars);
+        $keys = array_map(function ($item) {
+
+            return '{{' . $item . '}}';
+        }, $keys);
+
+
+
+        //$value = array_values($vars);
+
+        // echo "<pre>";
+        // print_r($keys);
+        // echo "</pre>";
+        // exit;
+
         // Retorna o conteúdo rederizado 
-        return $contentView;
+        return str_replace($keys, array_values($vars), $contentView);
     }
 }

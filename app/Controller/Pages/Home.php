@@ -17,6 +17,11 @@ class Home
 
     public static function getHome()
     {
-        return View::render('pages/home');
+        return View::render('pages/home', [
+            'name'      => 'Raimundo Marques',
+            'email'     => 'raimundo.marques.ff@gmail.com',
+            'cpf'       => '321654987-98', 
+            'matricula' => 202320142021
+        ]);
     }
 }
