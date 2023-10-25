@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use \Closure;
+use \Exception;
 
 class Router
 {
@@ -53,7 +54,6 @@ class Router
     {
         // Informações da URL ATUAL
         $parseURL = parse_url($this->url);
-
         // Define prefixo 
         $this->prefix = $parseURL['path'] ?? '';
     }
@@ -71,7 +71,7 @@ class Router
         foreach ($params as $key => $value) {
             if ($value instanceof Closure) {
                 $params['controller'] = $value;
-                unset($params['$key']);
+                unset($params[$key]);
                 continue;
             }
         }
@@ -81,12 +81,10 @@ class Router
 
         // Adicionando rota dentro da classe
         $this->routes[$pattenernRoute][$method] = $params;
-        echo "<pre>";
-        print_r($this);
-        echo "</pre>";
-        exit;
     }
 
+                            /** MÉTODOS DE CRUD */
+/*---------------------------------------------------------------------------------------*/
     /**
      * Método responsável por definir uma rota de GET
      * @param string $route
@@ -96,9 +94,118 @@ class Router
     {
         return $this->addRoute('GET', $route, $params);
     }
-}
 
-        // echo "<pre>";
-        // print_r($pattenernRoute);
-        // echo "</pre>";
-        // exit;
+/*---------------------------------------------------------------------------------------*/    
+
+    /**
+     * Método responsável por definir uma rota de POST
+     * @param string $route
+     * @param array $params
+     */
+    public function post($route, $params = [])
+    {
+        return $this->addRoute('POST', $route, $params);
+    }
+
+/*---------------------------------------------------------------------------------------*/
+
+    /**
+     * Método responsável por definir uma rota de PUT
+     * @param string $route
+     * @param array $params
+     */
+    public function put($route, $params = [])
+    {
+        return $this->addRoute('PUT', $route, $params);
+    }
+
+/*---------------------------------------------------------------------------------------*/
+
+    /**
+     * Método responsável por definir uma rota de DELETE
+     * @param string $route
+     * @param array $params
+     */
+    public function delete($route, $params = [])
+    {
+        return $this->addRoute('DELETE', $route, $params);
+    }
+/*---------------------------------------------------------------------------------------*/
+
+
+
+    /**
+     * Método responsável por retornar a URI desconsiderando o prefixo
+     * @return string
+     */
+    private function getUri()
+    {
+        // URI da Request
+        $uri = $this->request->getUri();
+
+        $xUri = strlen($this->prefix) ? explode($this->prefix, $uri) : [$uri];
+        return end($xUri);
+    }
+
+
+    /**
+     * Método responsável por retornar os dados da rota atual
+     * @return array
+     */
+    private function getRoute()
+    {
+        // URI
+        $uri = $this->getUri();
+        $httpMethod = $this->request->getHttpMethod();
+
+        // VALIDA AS ROTAS
+        foreach ($this->routes as $pattenernRoute => $methods) {
+
+            // Verifica se a rota atual bate com a rota padrão
+            if (preg_match($pattenernRoute, $uri)) {
+
+                // VERIFICA O MÉTODO
+                if ($methods[$httpMethod]) {
+
+                    // RETORNO DOS PARÂMETROS DA ROTA
+                    return $methods[$httpMethod];
+                }
+
+                // Método não permitido
+                throw new Exception("Método não permitido!", 405);
+            }
+        }
+
+        // URL não encontrada
+        throw new Exception("URL não encontrada!", 404);
+    }
+
+
+    /**
+     * Método responsável por executar a rota atual
+     * @return Response
+     */
+    public function run()
+    {
+        try {
+            //code...
+            
+            $route = $this->getRoute();
+
+            // VERIFICA O CONTROLLER
+            if(!isset($route['controller'])){
+                throw new Exception("A URL não pode ser processada!!", 500);
+            }
+
+
+            // echo '<pre>';
+            // print_r($route);
+            // echo '</pre>';exit;
+
+            
+        } catch (Exception $e) {
+            //throw $th;
+            return new Response($e->getCode(), $e->getMessage());
+        }
+    }
+}

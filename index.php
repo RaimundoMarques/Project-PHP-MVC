@@ -9,17 +9,15 @@ use \App\Controller\Pages\Home;
 
 define('URL', 'http://localhost/project-php-mvc');
 
-$obrouter = new Router(URL);
-
+$obRouter = new Router(URL);
 
 // Definindo a rota da página HOME
-$obrouter->get('/', [
+$obRouter->get('/', [
     function () {
         return new Response(200, Home::getHome());
     }
 ]);
 
-
-// echo "<pre>";
-// print_r($params);
-// echo "</pre>";
+// Imprime o response da Rota
+$obRouter->run()
+         ->sendResponse();
