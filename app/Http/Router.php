@@ -197,6 +197,11 @@ class Router
                 throw new Exception("A URL não pode ser processada!!", 500);
             }
 
+            // Argumentos da função
+            $args = []; 
+
+            // Retorna a execução da função
+            return call_user_func_array($route['controller'], $args);
 
             // echo '<pre>';
             // print_r($route);
