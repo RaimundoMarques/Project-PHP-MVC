@@ -15,9 +15,9 @@ class Page
      */
     private static function getHeader($namePage)
     {
-        $namePage = 'Home';
+        $msgPage = 'Bem-vindo ao Site Modelo - MVC';
         return View::render('pages/header', [
-            'namePage' => $namePage
+            'msgPage' => $msgPage
         ]);
     }
 

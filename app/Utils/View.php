@@ -6,6 +6,18 @@ namespace App\Utils;
 class View
 {
 
+    private static $vars;
+
+    /**
+     * Mátodo responsável pode definir os dados iniciais da classe
+     * @param array $vars
+     */
+    public static function init($vars = [])
+    {
+        self::$vars = $vars;
+    }
+
+
     /**
      * Método responsável por retornar o conteúdo de uma view
      * 

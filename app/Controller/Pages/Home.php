@@ -21,14 +21,11 @@ class Home extends Page
         $obOrganization = new Organization();
 
         // Título da página
-        $title = 'Página PHP - MVC';
+        $title = 'HOME - RdoMarques';
 
         // View da HOME
         $content = View::render('pages/home', [
-            'id'            => $obOrganization->id,
-            'name'          => $obOrganization->name,
-            'site'          => $obOrganization->site,
-            'description'   => $obOrganization->description
+            'name'          => $obOrganization->name
         ]);
 
         return parent::getPage($title, $content);

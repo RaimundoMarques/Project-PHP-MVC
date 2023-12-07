@@ -83,8 +83,8 @@ class Router
         $this->routes[$pattenernRoute][$method] = $params;
     }
 
-                            /** MÉTODOS DE CRUD */
-/*---------------------------------------------------------------------------------------*/
+    /** MÉTODOS DE CRUD */
+    /*---------------------------------------------------------------------------------------*/
     /**
      * Método responsável por definir uma rota de GET
      * @param string $route
@@ -95,7 +95,7 @@ class Router
         return $this->addRoute('GET', $route, $params);
     }
 
-/*---------------------------------------------------------------------------------------*/    
+    /*---------------------------------------------------------------------------------------*/
 
     /**
      * Método responsável por definir uma rota de POST
@@ -107,7 +107,7 @@ class Router
         return $this->addRoute('POST', $route, $params);
     }
 
-/*---------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------*/
 
     /**
      * Método responsável por definir uma rota de PUT
@@ -119,7 +119,7 @@ class Router
         return $this->addRoute('PUT', $route, $params);
     }
 
-/*---------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------*/
 
     /**
      * Método responsável por definir uma rota de DELETE
@@ -130,7 +130,7 @@ class Router
     {
         return $this->addRoute('DELETE', $route, $params);
     }
-/*---------------------------------------------------------------------------------------*/
+    /*---------------------------------------------------------------------------------------*/
 
 
 
@@ -144,6 +144,8 @@ class Router
         $uri = $this->request->getUri();
 
         $xUri = strlen($this->prefix) ? explode($this->prefix, $uri) : [$uri];
+
+        // Retorna a URI sem prefixo
         return end($xUri);
     }
 
@@ -189,25 +191,21 @@ class Router
     {
         try {
             //code...
-            
+
+            // Obtém a rota atual
             $route = $this->getRoute();
 
             // VERIFICA O CONTROLLER
-            if(!isset($route['controller'])){
-                throw new Exception("A URL não pode ser processada!!", 500);
+            if (!isset($route['controller'])) {
+                throw new Exception("A URL não pôde ser processada!!", 500);
             }
 
             // Argumentos da função
-            $args = []; 
+            $args = [];
 
             // Retorna a execução da função
             return call_user_func_array($route['controller'], $args);
 
-            // echo '<pre>';
-            // print_r($route);
-            // echo '</pre>';exit;
-
-            
         } catch (Exception $e) {
             //throw $th;
             return new Response($e->getCode(), $e->getMessage());
