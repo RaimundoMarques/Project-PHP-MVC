@@ -4,6 +4,8 @@ namespace App\Http;
 
 use \Closure;
 use \Exception;
+use Reflection;
+use ReflectionFunction;
 
 class Router
 {
@@ -76,11 +78,22 @@ class Router
             }
         }
 
+        // VARIÁVEIS DA ROTA
+        $params['variables'] = [];
+
+        // PADRÃO DE VALIDAÇÃO DAS VARIÁVEIS DAS ROTAS
+        $patternVariable = '/{(.*?)}/';
+        if (preg_match_all($patternVariable, $route, $matches)) {
+            $route = preg_replace($patternVariable, '(.*?)', $route);
+
+            $params['variables'] = $matches[1];
+        }
+
         // Padrão de validação da URL
-        $pattenernRoute = '/^' . str_replace('/', '\/', $route) . '$/';
+        $patternRoute = '/^' . str_replace('/', '\/', $route) . '$/';
 
         // Adicionando rota dentro da classe
-        $this->routes[$pattenernRoute][$method] = $params;
+        $this->routes[$patternRoute][$method] = $params;
     }
 
     /** MÉTODOS DE CRUD */
@@ -161,13 +174,21 @@ class Router
         $httpMethod = $this->request->getHttpMethod();
 
         // VALIDA AS ROTAS
-        foreach ($this->routes as $pattenernRoute => $methods) {
+        foreach ($this->routes as $patternRoute => $methods) {
 
             // Verifica se a rota atual bate com a rota padrão
-            if (preg_match($pattenernRoute, $uri)) {
+            if (preg_match($patternRoute, $uri, $matches)) {
 
                 // VERIFICA O MÉTODO
                 if ($methods[$httpMethod]) {
+
+                    // Removendo a primeira posição
+                    unset($matches[0]);
+
+                    // CHAVES DAS VARIÁVEIS PROCESSADAS
+                    $keys = $methods[$httpMethod]['variables'];
+                    $methods[$httpMethod]['variables'] = array_combine($keys, $matches);
+                    $methods[$httpMethod]['variables']['request'] = $this->request;
 
                     // RETORNO DOS PARÂMETROS DA ROTA
                     return $methods[$httpMethod];
@@ -203,9 +224,23 @@ class Router
             // Argumentos da função
             $args = [];
 
+
+            //REFLECTION
+            $reflection = new ReflectionFunction($route['controller']);
+            foreach ($reflection->getParameters() as $parameter) {
+
+                echo "<pre>";
+                print_r($route);
+                echo "</pre>";
+
+            }
+
+
+
+
+
             // Retorna a execução da função
             return call_user_func_array($route['controller'], $args);
-
         } catch (Exception $e) {
             //throw $th;
             return new Response($e->getCode(), $e->getMessage());
