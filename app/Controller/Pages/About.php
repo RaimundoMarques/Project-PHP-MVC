@@ -10,7 +10,7 @@ class About extends Page
 {
 
     /**
-     * Método responsável por retornar o conteúdo da view About
+     * Método responsável por retornar o conteúdo da página de sobre
      * 
      * @return string 
      */

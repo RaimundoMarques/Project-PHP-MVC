@@ -180,7 +180,7 @@ class Router
             if (preg_match($patternRoute, $uri, $matches)) {
 
                 // VERIFICA O MÉTODO
-                if ($methods[$httpMethod]) {
+                if (isset($methods[$httpMethod])) {
 
                     // Removendo a primeira posição
                     unset($matches[0]);
@@ -229,15 +229,13 @@ class Router
             $reflection = new ReflectionFunction($route['controller']);
             foreach ($reflection->getParameters() as $parameter) {
 
-                echo "<pre>";
-                print_r($route);
-                echo "</pre>";
-
+                $name = $parameter->getName();
+                $args[$name] = $route['variables'][$name] ?? '';
             }
 
-
-
-
+            // echo "<pre>";
+            // print_r($args);
+            // echo "</pre>";exit;
 
             // Retorna a execução da função
             return call_user_func_array($route['controller'], $args);
