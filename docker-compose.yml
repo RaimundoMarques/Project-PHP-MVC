@@ -1,0 +1,16 @@
+services:
+  web:
+    image: nginx:latest
+    container_name: container-nginx
+    restart: always
+    ports:
+      - "8080:80" 
+    volumes:
+      - /home/raimundo-marques/Projects/docker/project-php-mvc:/usr/share/nginx/html
+    links:
+    - php
+  php:
+    image: php:7.3-fpm
+    container_name: container-php
+    volumes:
+    - /home/raimundo-marques/Projects/docker/project-php-mvc:/www/html

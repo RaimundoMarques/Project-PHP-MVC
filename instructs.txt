@@ -9,4 +9,4 @@
 
 #Para rodar uma página 'index.html' dentro de um servidor web nginx, por exemplo:
 
-    docker run -d -p 8080:80 --name container-nginx -v $(pwd)/html:/usr/share/nginx/html nginx
+    docker run -d -p 8080:80 --name container-nginx -v $(pwd)/:/usr/share/nginx/html nginx
