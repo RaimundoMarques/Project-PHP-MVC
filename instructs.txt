@@ -1,0 +1,12 @@
+# Para rodar a aplicação, precisamos buildar a imagem dentro do diretório:
+    docker build -t nomeImagem .
+
+#Depois do comando acima, a imagem deverá aparecer no docker com o nome que damos
+
+#Depois, vamos rodar a imagem dentro do container tbm nomeado:
+
+    docker run -d -p 3000:3000 --name container-docker nomeImagem
+
+#Para rodar uma página 'index.html' dentro de um servidor web nginx, por exemplo:
+
+    docker run -d -p 8080:80 --name container-nginx -v $(pwd)/html:/usr/share/nginx/html nginx
