@@ -6,20 +6,22 @@ services:
       dockerfile: nginx/Dockerfile
     container_name: container-nginx
     ports:
-      - "8080:80" 
+      - "8080:80"
     volumes:
       - /home/raimundo-marques/Projects/project-php-mvc:/var/www/html/
       - ./logs/nginx:/var/log/nginx/
     networks:
       - internal
   php:
-    image: php:7.3-fpm
+    build:
+      context: .
+      dockerfile: php/Dockerfile
     container_name: container-php
     networks:
       - internal
     volumes:
-    - /home/raimundo-marques/Projects/project-php-mvc:/var/www/html/
-    - ./logs/php.log:/var/log/fpm-php.www.log
+      - /home/raimundo-marques/Projects/project-php-mvc:/var/www/html/
+      - ./logs/php.log:/var/log/fpm-php.www.log
 networks:
   internal:
     driver: bridge
