@@ -6,11 +6,12 @@ services:
     ports:
       - "8080:80" 
     volumes:
-      - /home/raimundo-marques/Projects/docker/project-php-mvc:/usr/share/nginx/html
+      - /home/raimundo-marques/Projects/project-php/project-php-mvc:/usr/share/nginx/html
+      - ./site.conf:/etc/nginx/conf.d/site.conf
     links:
     - php
   php:
     image: php:7.3-fpm
     container_name: container-php
     volumes:
-    - /home/raimundo-marques/Projects/docker/project-php-mvc:/www/html
+    - /home/raimundo-marques/Projects/project-php/project-php-mvc:/www/html
